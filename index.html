@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title></title>
+
+  <!-- Fonte -->
+  <link href="https://kinsta.com/pt/blog/fontes-cursivas/#13-lemon-jelly" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- JS (defer para carregar após o HTML) -->
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <!-- Modal de instruções (abre automaticamente) -->
+  <div id="instructionsModal" class="modal" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
+    <div class="modal-content">
+      <h2 id="modalTitle">Como jogar</h2>
+      <ul>
+        <li><strong>←</strong> Mover para a esquerda</li>
+        <li><strong>→</strong> Mover para a direita</li>
+        <li><strong>↓</strong> Descer mais rápido</li>
+        <li><strong>↑</strong> Girar peça</li>
+        <li><strong>Espaço</strong> Hard drop (cair direto)</li>
+      </ul>
+
+      <p class="muted">Digite seu nome e clique em <em>Começar jogo</em> para iniciar.</p>
+      <div class="modal-actions">
+        <button id="closeModalBtn" class="btn-primary">Entendi!</button>
+      </div>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <h1>Moon block</h1>
+  </header>
+
+  <main class="game-layout" id="fundo">
+    <!-- coluna esquerda: speed e terminal -->
+    <aside class="panel left-panel">
+      <div class="card speed-card" aria-live="polite">
+        <h3>Speed</h3>
+        <p class="speed-value">1.0x</p>
+      </div>
+
+      <div class="card terminal-card">
+        <h3>Terminal</h3>
+        <table id="scoreTable" class="score-table" aria-label="Tabela de pontuações">
+          <thead>
+            <tr><th>Nome</th><th>Pontos</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <div class="terminal-controls">
+          <button id="clearScoresBtn" class="btn-ghost">Limpar placar</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- coluna central: input e tabuleiro -->
+    <section class="center-panel">
+      <div class="controls-row">
+        <label for="playerName" class="label-inline">Nome:</label>
+        <input id="playerName" type="text" placeholder="Digite seu nome" aria-label="Nome do jogador" />
+        <button id="startBtn" class="btn-primary">Começar jogo</button>
+      </div>
+
+      <div class="tetris-card card">
+        <div class="status-row">
+          <div>
+            <h4>Score</h4>
+            <div class="score-value" aria-live="polite">000000</div>
+          </div>
+          <div>
+            <h4>Lines</h4>
+            <div class="lines-value" aria-live="polite">0</div>
+          </div>
+          <div>
+            <h4>Time</h4>
+            <div class="time-value" aria-live="polite">00:00:00</div>
+          </div>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- canvas principal -->
+        <div class="canvas-wrap" role="img" aria-label="Tabuleiro do jogo Tetris">
+          <canvas id="mainCanvas" width="300" height="600"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- coluna direita: next + misc -->
+    <aside class="panel right-panel">
+      <div class="card next-card">
+        <h3>Next</h3>
+        <canvas id="nextCanvas" width="150" height="150"></canvas>
+      </div>
+
+      <div class="card info-card">
+        <h3>Dicas</h3>
+        <ul>
+          <p> • Use ↑ para rotacionar; </p>
+          <p> • Evite preencher buracos. </p>
+        </ul>
+      </div>
+    </aside>
+  </main>
+</body>
+</html>
