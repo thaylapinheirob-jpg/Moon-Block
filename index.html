@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -6,7 +7,7 @@
   <title></title>
 
   <!-- Fonte -->
-  <link href="https://kinsta.com/pt/blog/fontes-cursivas/#13-lemon-jelly" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <!-- CSS -->
   <link rel="stylesheet" href="styles.css">
@@ -34,9 +35,10 @@
     </div>
   </div>
 
-  <header class="topbar">
-    <h1>Moon block</h1>
-  </header>
+ <header class="topbar">
+  <h1 id="moonTitle">🌙 Moon Block</h1>
+<canvas id="moonCanvas"></canvas>
+</header>
 
   <main class="game-layout" id="fundo">
     <!-- coluna esquerda: speed e terminal -->
@@ -63,7 +65,7 @@
     <!-- coluna central: input e tabuleiro -->
     <section class="center-panel">
       <div class="controls-row">
-        <label for="playerName" class="label-inline">Nome:</label>
+        <label for="playerName" clas<label for="playerName" class="label-inline nome-label">Nome:</label>
         <input id="playerName" type="text" placeholder="Digite seu nome" aria-label="Nome do jogador" />
         <button id="startBtn" class="btn-primary">Começar jogo</button>
       </div>
@@ -104,10 +106,35 @@
         <h3>Dicas</h3>
         <ul>
           <p> • Use ↑ para rotacionar; </p>
-          <p> • Evite preencher buracos. </p>
+          <p> • Evite fazer buracos. </p>
         </ul>
       </div>
-    </aside>
-  </main>
+      
+  <div id="pausePopup" class="modal" style="display: none;">
+  <div class="modal-content">
+    <h2>Pause</h2>
+    <p>Desenvolvido por:</p>
+    <ul>
+      <li>Ana Carolina</li>
+      <li>Geraldo Xavier</li>
+      <li>Mariana Gontijo</li>
+      <li>Thayla Pinheiro</li>
+    </ul>
+    
+    <div class="volume-control">
+      <label for="volumeControl">Volume:</label>
+      <input type="range" id="volumeControl" min="0" max="1" step="0.1" value="0.5">
+    </div>
+    
+    <div class="modal-actions">
+      <button id="resumeBtn" class="btn-primary">Continuar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Adicionar o elemento de áudio no final do body -->
+<audio id="backgroundMusic" loop>
+  <source src="batata.mp3" type="audio/mpeg">
+</audio>
 </body>
 </html>
