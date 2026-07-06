@@ -1,5 +1,18 @@
 /* styles.css - visual limpo, responsivo e organizado */
 
+/* Adicione esta linha no topo do arquivo, dentro do bloco :root, para definir uma nova fonte */
+:root {
+  --font-title: 'Arial Black', sans-serif; /* ou qualquer outra fonte desejada */
+  --color-title: #ff6b6b; /* cor desejada para o título */
+}
+
+/* Estilo do título */
+.topbar h1 {
+  font-size: 2.0rem;
+  letter-spacing: 1px;
+  font-family: 'Courgette';
+  color: white ;
+}
 /* Fonte padrão */
 :root{
   --bg: #fff5fb;
@@ -20,12 +33,7 @@ html,body{ height:100%; background: linear-gradient(180deg,#fff7fb 0%, #f6f8ff 1
   text-align: center;
   padding: 18px 12px;
 }
-.topbar h1 {
-  font-size: 1.6rem;
-  letter-spacing: 1px;
-  color: #your-color-here; /* Exemplo: #ff5733 */
-}
-
+.topbar h1 { font-size: 1.6rem; letter-spacing: 1px; }
 .topbar .subtitle { color: var(--muted); font-size: 0.9rem; margin-top: 4px; }
 
 /* Layout principal */
@@ -142,5 +150,96 @@ html, body {
   color: #222;
 }
 
-.label-inline { font-weight:600; color:white; margin-right:6px; }
+.label-inline {
+  font-weight: 600;
+  color: #FFFFFF; /* Cor vermelha para NOME */
+  margin-right: 6px;
+}
 
+.nome-label {
+  color: #FFFFFF; /* Cor vermelha para NOME */
+}
+
+/* ====== FADA SECRETA (EASTER EGG) ====== */
+#fairyEasterEgg {
+  position: fixed;
+  bottom: 100px;
+  right: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.2s ease;
+  z-index: 99999;
+}
+
+.fairy-img {
+  width: 120px;
+  height: auto;
+  animation: fairy-float 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.8));
+}
+
+.fairy-text {
+  margin-top: 8px;
+  color: #ffeef8;
+  font-weight: 600;
+  text-shadow: 0 0 10px #ffbdf2;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* animação flutuante */
+@keyframes fairy-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* classes para mostrar/ocultar */
+.fairy-visible { opacity: 1; }
+.fairy-hidden { opacity: 0; }
+
+/* Estilos para o popup de pause */
+#pausePopup {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.7);
+  z-index: 10000;
+}
+
+.volume-control {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.volume-control label {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+#volumeControl {
+  width: 80%;
+}
+#moonTitle {
+  font-size: 3em;
+  color: #fff;
+  text-shadow: 0 0 10px #99ccff, 0 0 30px #ddeeff;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+}
+
+#moonCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none; /* não bloqueia cliques */
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
