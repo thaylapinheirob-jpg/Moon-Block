@@ -20,6 +20,11 @@ const clearScoresBtn = document.getElementById('clearScoresBtn');
 const instructionsModal = document.getElementById('instructionsModal');
 const closeModalBtn = document.getElementById('closeModalBtn');
 
+const backgroundMusic = document.getElementById('backgroundMusic');
+const pausePopup = document.getElementById('pausePopup');
+const resumeBtn = document.getElementById('resumeBtn');
+const volumeControl = document.getElementById('volumeControl');
+
 /* ========= Constantes do jogo ========= */
 const COLS = 10;
 const ROWS = 20;
@@ -70,6 +75,11 @@ function randomTetromino(){
 /* ========= Início / Reset / Salvar placares ========= */
 function initBoard(){
   board = Array.from({length: ROWS}, () => Array(COLS).fill(0));
+  
+  // Adicionar evento para o botão de volume
+volumeControl.addEventListener('input', function() {
+  backgroundMusic.volume = this.value;
+});
 }
 
 function resetGame(){
@@ -228,6 +238,7 @@ function clearLines(){
     score += SCORE_PER_LINE * removed;
     linesCleared += removed;
     updateSpeed();
+    updateBackground(); // Adiciona esta linha
   }
 }
 
@@ -297,7 +308,9 @@ function updateDisplays(){
   scoreValueEl.textContent = score.toString().padStart(6,'0');
   linesValueEl.textContent = linesCleared;
   updateTimeDisplay();
+  updateBackground();
 }
+
 
 /* Formato hh:mm:ss */
 function updateTimeDisplay(){
@@ -326,22 +339,24 @@ function togglePause() {
   if (gameOver) return;
   
   isPaused = !isPaused;
-  pauseBtn.textContent = isPaused ? 'Resume' : 'Pause';
   
   if (isPaused) {
+    // Pausar o jogo e mostrar popup
     clearInterval(gameInterval);
     clearInterval(timeInterval);
+    pausePopup.style.display = 'flex';
+    backgroundMusic.pause();
   } else {
-    // Reinicia os intervalos apenas se o jogo ainda estiver ativo
-    if (!gameOver) {
-      gameInterval = setInterval(drop, speed);
-      timeInterval = setInterval(() => {
-        if (!gameOver) {
-          elapsedTime++;
-          updateTimeDisplay();
-        }
-      }, 1000);
-    }
+    // Retomar o jogo
+    pausePopup.style.display = 'none';
+    gameInterval = setInterval(drop, speed);
+    timeInterval = setInterval(() => {
+      if (!gameOver) {
+        elapsedTime++;
+        updateTimeDisplay();
+      }
+    }, 1000);
+    backgroundMusic.play();
   }
 }
 
@@ -419,6 +434,17 @@ function renderScoreTable(){
 
 renderScoreTable();
 
+// Adicionar evento para o botão de continuar
+resumeBtn.addEventListener('click', function() {
+  togglePause();
+});
+
+// Iniciar música ao carregar a página
+window.addEventListener('load', function() {
+  backgroundMusic.volume = volumeControl.value;
+  backgroundMusic.play().catch(e => console.log("Erro ao reproduzir música:", e));
+});
+
 /* ========= Inicialização visual ========= */
 function initialDraw(){
   draw();
@@ -427,3 +453,120 @@ function initialDraw(){
 }
 initBoard();
 initialDraw();
+
+/* ====== EASTER EGG: FADA SECRETA ====== */
+let consecutiveLines = 0; // contador de linhas seguidas
+
+// Pega referência ao elemento da fada
+const fairyEl = document.getElementById('fairyEasterEgg');
+
+// Mostra a fada mágica
+function showFairy() {
+  fairyEl.classList.remove('fairy-hidden');
+  fairyEl.classList.add('fairy-visible');
+
+  // Depois de 6 segundos, ela desaparece
+  setTimeout(() => {
+    fairyEl.classList.remove('fairy-visible');
+    fairyEl.classList.add('fairy-hidden');
+  }, 6000);
+}
+
+// Modifica a função clearLines para incluir o contador de easter egg
+const oldClearLines = clearLines;
+clearLines = function() {
+  let before = linesCleared;
+  oldClearLines(); // executa a função original
+  let gained = linesCleared - before;
+
+  if (gained > 0) {
+    consecutiveLines += gained;
+    if (consecutiveLines >= 5) { // ativa o easter egg
+      showFairy();
+      consecutiveLines = 0; // reseta o contador
+    }
+  } else {
+    // se não limpou nenhuma linha nessa jogada, reseta o contador
+    consecutiveLines = 0;
+  }
+};
+function updateBackground() {
+  const fundo = document.getElementById('fundo');
+  if (!fundo) return;
+  if (score >= 100) {
+    // muda o fundo para uma imagem quando atinge 100 pontos
+    fundo.style.background = "url('https://uploads.onecompiler.io/442ac9wpt/443rzym7e/Gemini_Generated_Image_wjo9luwjo9luwjo9.png') center center no-repeat";
+    fundo.style.backgroundSize = "cover";
+  }
+}
+/* ====== EASTER EGG: PARTÍCULAS DE LUAS ====== */
+
+// Pega o título e o canvas
+const moonTitle = document.getElementById('moonTitle');
+const moonCanvas = document.getElementById('moonCanvas');
+const mCtx = moonCanvas.getContext('2d');
+
+// Ajusta o tamanho do canvas
+function resizeMoonCanvas() {
+  moonCanvas.width = window.innerWidth;
+  moonCanvas.height = window.innerHeight;
+}
+resizeMoonCanvas();
+window.addEventListener('resize', resizeMoonCanvas);
+
+// Array para guardar as luas
+let moons = [];
+
+// Função que cria várias luas no clique
+function createMoonParticles(x, y) {
+  for (let i = 0; i < 20; i++) {
+    moons.push({
+      x: x,
+      y: y,
+      size: Math.random() * 10 + 5,
+      dx: (Math.random() - 0.5) * 3,
+      dy: (Math.random() - 1.5) * 3,
+      opacity: 1,
+      rotation: Math.random() * Math.PI * 2
+    });
+  }
+}
+
+// Função para desenhar e animar as luas
+function animateMoons() {
+  mCtx.clearRect(0, 0, moonCanvas.width, moonCanvas.height);
+
+  moons.forEach((m, index) => {
+    m.x += m.dx;
+    m.y += m.dy;
+    m.dy += 0.03; // gravidade leve
+    m.opacity -= 0.01;
+
+    // desenha cada lua como um pequeno círculo brilhante
+    mCtx.save();
+    mCtx.globalAlpha = m.opacity;
+    mCtx.translate(m.x, m.y);
+    mCtx.rotate(m.rotation);
+    mCtx.beginPath();
+    mCtx.arc(0, 0, m.size, 0, Math.PI * 2);
+    mCtx.fillStyle = 'rgba(255, 255, 200, 0.9)';
+    mCtx.shadowColor = '#fff5cc';
+    mCtx.shadowBlur = 10;
+    mCtx.fill();
+    mCtx.restore();
+
+    // remove se sumir
+    if (m.opacity <= 0) moons.splice(index, 1);
+  });
+
+  requestAnimationFrame(animateMoons);
+}
+animateMoons();
+
+// Evento: clique no título → gera luas
+moonTitle.addEventListener('click', (e) => {
+  const rect = moonTitle.getBoundingClientRect();
+  const x = rect.left + rect.width / 2;
+  const y = rect.top + rect.height / 2;
+  createMoonParticles(x, y);
+});
